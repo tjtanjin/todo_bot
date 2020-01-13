@@ -18,9 +18,12 @@ def check_user_tasks(context):
 			current_date = datetime.date.today()
 			for task in tasks:
 				days_left = getDifference(task["deadline"], current_date)
-				if days_left <= 3:
+				if days_left <= 3 and days_left >= 0:
+					if days_left == 0:
+						days_left = "Today"
 					expiring_tasks.append([task["task_name"], days_left])
-			send_reminders(user["name"], user["telegram_id"], expiring_tasks, context)
+			if len(expiring_tasks) != 0:
+				send_reminders(user["name"], user["telegram_id"], expiring_tasks, context)
 
 def getDifference(deadline, current_date): 
 	deadlineparts = deadline.split('-');
@@ -38,7 +41,7 @@ def callback_timer(update, context):
 		is_su = json.load(file)["su"]
 	if str(update.message.chat_id) == is_su:
 		print("Queue started")
-		context.job_queue.run_daily(check_user_tasks, datetime.time(8, 00, 00), context=context)
+		context.job_queue.run_daily(check_user_tasks, datetime.time(00, 00, 00), context=context)
 
 def stop_timer(update, context):
 	with open("./config/bot.json", "r") as file:
