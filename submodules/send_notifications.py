@@ -33,8 +33,27 @@ def getDifference(deadline, current_date):
 def send_reminders(todo_name, telegram_id, tasks, context):
 	string = "Hello " + todo_name + ", this is a daily reminder that your following tasks are expiring soon:\n\n" + "Task Name ----- Days Left\n"
 	for task in tasks:
-		string = string + task[0] + " ----- " + str(task[1]) + "\n"
-	context.bot.send_message(chat_id=telegram_id, text=string) 
+		task_name, days_left = formatMessage(task[0], str(task[1]))
+		string = string + task_name + " ----- " + days_left + "\n"
+	context.bot.send_message(chat_id=telegram_id, text=string)
+
+def formatMessage(task_name, days_left):
+	for chars in range(0, 10):
+		if len(task_name) < 10:
+			task_name = task_name + " "
+		elif len(task_name) > 10:
+			task_name = task_name[:7] + "..."
+		else:
+			break
+	for chars in range(0, 10):
+		if len(days_left) < 10:
+			days_left = " " + days_left
+		elif len(task_name) > 10:
+			days_left = "Invalid"
+			break
+		else:
+			break
+	return [task_name, days_left]
 
 def callback_timer(update, context):
 	with open("./config/bot.json", "r") as file:
