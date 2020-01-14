@@ -1,3 +1,4 @@
+from telegram import ParseMode
 import json, requests, datetime
 
 def check_user_tasks(context):
@@ -35,20 +36,21 @@ def send_reminders(todo_name, telegram_id, tasks, context):
 	for task in tasks:
 		task_name, days_left = formatMessage(task[0], str(task[1]))
 		string = string + task_name + " ----- " + days_left + "\n"
-	context.bot.send_message(chat_id=telegram_id, text=string)
+	string = "<pre>" + string + "</pre>"
+	context.bot.send_message(chat_id=telegram_id, text=string, parse_mode=ParseMode.HTML)
 
 def formatMessage(task_name, days_left):
 	for chars in range(0, 10):
-		if len(task_name) < 10:
+		if len(task_name) < 9:
 			task_name = task_name + " "
-		elif len(task_name) > 10:
+		elif len(task_name) > 9:
 			task_name = task_name[:7] + "..."
 		else:
 			break
 	for chars in range(0, 10):
-		if len(days_left) < 10:
+		if len(days_left) < 9:
 			days_left = " " + days_left
-		elif len(task_name) > 10:
+		elif len(task_name) > 9:
 			days_left = "Invalid"
 			break
 		else:
