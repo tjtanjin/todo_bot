@@ -1,3 +1,4 @@
+from telegram import ParseMode
 import json, requests
 
 def link_user(update, context):
@@ -12,3 +13,11 @@ def link_user(update, context):
         update.message.reply_text("Account already linked.")
     else:
         update.message.reply_text("An error has occurred, please contact an administrator.")
+    return None
+
+def show_help(update, context):
+    update.message.reply_text("""Here are the currently available commands:\n
+        <b>/link (email)</b> - links your telegram and todo manager accounts\n
+        <b>/help</b> - displays the available commands\n
+Have ideas and suggestions for this mini project? Head over to the <a href="https://github.com/tjtanjin/todo_website">Project Repository</a>!""", parse_mode=ParseMode.HTML, disable_web_page_preview=True)
+    return None

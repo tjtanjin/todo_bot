@@ -10,6 +10,7 @@ def main():
 	updater = Updater(token, use_context=True, workers=4)
 	dp = updater.dispatcher
 	dp.add_handler(CommandHandler("link", ui.link_user, pass_args=True))
+	dp.add_handler(CommandHandler("help", ui.show_help))
 	dp.add_handler(CommandHandler("start", sn.callback_timer, pass_job_queue=True))
 	dp.add_handler(CommandHandler("stop", sn.stop_timer, pass_job_queue=True))
 	updater.start_polling()
