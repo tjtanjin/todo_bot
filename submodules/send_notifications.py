@@ -41,7 +41,7 @@ def callback_timer(update, context):
 		is_su = json.load(file)["su"]
 	if str(update.message.chat_id) == is_su:
 		print("Queue started")
-		context.job_queue.run_daily(check_user_tasks, datetime.time(00, 00, 00), context=context)
+		context.job_queue.run_daily(check_user_tasks, datetime.time(16, 00, 00), context=context)
 
 def stop_timer(update, context):
 	with open("./config/bot.json", "r") as file:
