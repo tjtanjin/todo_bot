@@ -1,5 +1,5 @@
 from telegram import ParseMode
-import json, requests, datetime
+import json, requests, datetime, pytz
 
 def check_user_tasks(context):
 	print("Checking to send reminders...")
@@ -16,10 +16,12 @@ def check_user_tasks(context):
 			get_task_res = requests.get(endpoint + "/users/" + str(user["id"]) + "/tasks", headers = { "Authorization": "Bearer " + token})
 			tasks = json.loads(get_task_res.content)
 			expiring_tasks = []
-			current_date = datetime.date.today()
+			timezone = pytz.timezone("Asia/Singapore")
+			unaware_date = datetime.datetime.now()
+			current_date = pytz.utc.localize(unaware_date, is_dst=None).astimezone(timezone).date()
 			for task in tasks:
 				days_left = getDifference(task["deadline"], current_date)
-				if days_left <= 3 and days_left >= 0:
+				if days_left <= 3 and days_left >= 0 and task["priority"] != "Completed" and task["priority"] != "Overdue":
 					if days_left == 0:
 						days_left = "Today"
 					expiring_tasks.append([task["task_name"], days_left])
@@ -44,13 +46,13 @@ def formatMessage(task_name, days_left):
 		if len(task_name) < 9:
 			task_name = task_name + " "
 		elif len(task_name) > 9:
-			task_name = task_name[:7] + "..."
+			task_name = task_name[:6] + "..."
 		else:
 			break
 	for chars in range(0, 10):
 		if len(days_left) < 9:
 			days_left = " " + days_left
-		elif len(task_name) > 9:
+		elif len(days_left) > 9:
 			days_left = "Invalid"
 			break
 		else:
@@ -62,7 +64,7 @@ def callback_timer(update, context):
 		is_su = json.load(file)["su"]
 	if str(update.message.chat_id) == is_su:
 		print("Queue started")
-		context.job_queue.run_daily(check_user_tasks, datetime.time(16, 00, 00), context=context)
+		context.job_queue.run_daily(check_user_tasks, datetime.time(17, 43, 00), context=context)
 
 def stop_timer(update, context):
 	with open("./config/bot.json", "r") as file:
