@@ -1,4 +1,5 @@
-from telegram import ParseMode
+from telegram import ParseMode, InlineKeyboardButton, InlineKeyboardMarkup
+from submodules import miscellaneous as mc
 import json, requests, datetime, pytz
 
 def check_user_tasks(context):
@@ -54,12 +55,13 @@ def send_reminders(todo_name, telegram_id, tasks, context):
 		tasks: tasks that are expiring
 		context: default telegram arg
 	"""
-	string = "Hello " + todo_name + ", this is a daily reminder that your following tasks are expiring soon:\n\n" + "Task Name ----- Days Left\n"
+	string = "Hello " + todo_name + ", this is a daily reminder that your following tasks are expiring soon:\n\n" + "<b>[Task Name]</b> ------- <b>[Days Left]</b>\n"
 	for task in tasks:
 		task_name, days_left = formatMessage(task[0], str(task[1]))
-		string = string + task_name + " ----- " + days_left + "\n"
+		string = string + task_name + " ------- " + days_left + "\n"
 	string = "<pre>" + string + "</pre>"
-	context.bot.send_message(chat_id=telegram_id, text=string, parse_mode=ParseMode.HTML)
+	reply_markup = InlineKeyboardMarkup(mc.build_menu([InlineKeyboardButton("Go to tasks", url="https://todo-manager.tjtanjin.com/tasks")], n_cols=2))
+	context.bot.send_message(chat_id=telegram_id, text=string, parse_mode=ParseMode.HTML, reply_markup=reply_markup)
 
 def formatMessage(task_name, days_left):
 	"""
@@ -68,17 +70,17 @@ def formatMessage(task_name, days_left):
 		task_name: name of the task
 		days_left: days left to task expiry
 	"""
-	for chars in range(0, 10):
-		if len(task_name) < 9:
+	for chars in range(0, 12):
+		if len(task_name) < 11:
 			task_name = task_name + " "
-		elif len(task_name) > 9:
-			task_name = task_name[:6] + "..."
+		elif len(task_name) > 11:
+			task_name = task_name[:8] + "..."
 		else:
 			break
-	for chars in range(0, 10):
-		if len(days_left) < 9:
+	for chars in range(0, 12):
+		if len(days_left) < 11:
 			days_left = " " + days_left
-		elif len(days_left) > 9:
+		elif len(days_left) > 11:
 			days_left = "Invalid"
 			break
 		else:
