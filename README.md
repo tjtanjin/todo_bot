@@ -86,7 +86,7 @@ $ python3 todo-manager-bot.py
 * If you wish to host your telegram bot online 24/7, do checkout the guide [here](https://gist.github.com/tjtanjin/ce560069506e3b6f4d70e570120249ed).
 
 ### Team
-* [Tan Jin](#https://github.com/tjtanjin)
+* [Tan Jin](https://github.com/tjtanjin)
 
 ### Contributing
 If you have code to contribute to the project, open a pull request and describe clearly the changes and what they are intended to do (enhancement, bug fixes etc). Alternatively, you may simply raise bugs or suggestions by opening an issue.
