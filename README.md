@@ -74,7 +74,7 @@ $ git clone https://github.com/tjtanjin/todo_bot.git
 ```
 {"endpoint": "your_endpoint_ip_address/api/v1"}
 ```
-* Then, create a third file within the config folder called bot.json with the following example fields which would support additional admin commands for /start and /stop. You may use dummy values if you have no interest in these 2 commands.
+* Then, create a third file within the config folder called bot.json with the following example fields which essentially adds an admin account that can execute /start and /stop. Note that this is necessary as the admin command /start is required to initialize automatic reminders.
 ```
 {"su": "your_telegram_id", "email": "your_email_account_on_todo_website", "password":"your_account_password"}
 ```
@@ -82,7 +82,8 @@ $ git clone https://github.com/tjtanjin/todo_bot.git
 ```
 $ python3 todo-manager-bot.py
 ```
-* Note that with all these setup, only the telegram bot is working. Reminders and linking will not work unless the API is setup correctly. For that, please refer to the setup guide [here](https://github.com/tjtanjin/todo_api#setup).
+* Do remember to send /start to your telegram bot to initialize automatic reminders! 
+* Note that with all these setup, only the telegram bot is working. Reminders and linking will still not work unless the API is setup correctly. For that, please refer to the setup guide [here](https://github.com/tjtanjin/todo_api#setup).
 * If you wish to host your telegram bot online 24/7, do checkout the guide [here](https://gist.github.com/tjtanjin/ce560069506e3b6f4d70e570120249ed).
 
 ### Team
